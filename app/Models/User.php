@@ -17,18 +17,16 @@ use Illuminate\Notifications\Notifiable;
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'nama',
-        'alamat',
-        'no_ktp',
-        'no_hp',
-        'no_rm',
-        'role',
-        'id_poli',
-        'email',
-        'password',
-
-    ];
+        protected $fillable = [
+            'name',
+            'email',
+            'password',
+            'role',
+            'alamat',  // Tambahkan ini
+            'no_ktp',  // Tambahkan ini
+            'no_hp',   // Tambahkan ini
+            'id_poli', // Tambahkan ini
+        ];
 
     /**
      * The attributes that should be hidden for serialization.
