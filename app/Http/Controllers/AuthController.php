@@ -40,16 +40,19 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
-            'no_ktp' => 'required|string|max:30',
-            'no_hp' => 'required|string|max:20',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'alamat' => 'required|string',
+            'no_ktp' => 'required|numeric|unique:users,no_ktp',
+            'no_hp' => 'required|numeric',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
         ]);
 
-        if(user::where('no_ktp', $request->no_ktp)->exists()) {
+        if(User::where('no_ktp', $request->no_ktp)->exists()) {
             return back()->withErrors(['no_ktp' => 'No KTP sudah terdaftar!']);
         }
+        $lastPasien = User::where('role', 'pasien')->orderBy('id', 'desc')->first();
+        $lastId = $lastPasien ? $lastPasien->id + 1 : 1;
+        $no_rm = date('Ym') . '-' . str_pad($lastId, 3, '0', STR_PAD_LEFT);
 
         User::create([
             'name' => $request->name,
@@ -61,7 +64,7 @@ class AuthController extends Controller
             'role' => 'pasien',
         ]);
 
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.'  );
     }
         public function logout()
         {
