@@ -1,4 +1,4 @@
-﻿<x-layouts.app title="Edit Obat">
+<x-layouts.app title="Edit Obat">
 
 
     {{-- Header --}}
@@ -63,27 +63,41 @@
                 </div>
 
 
-                {{-- Harga --}}
-                <div class="mb-8">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">
-                        Harga <span class="text-red-500">*</span>
-                    </label>
+                {{-- Harga & Stok --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
-
-                    <div class="flex items-center border-2 rounded-lg p-2 px-4 py-2
-                                focus-within:border-primary">
-                        <span class="text-slate-500 text-sm font-semibold mr-2">
-                            Rp
-                        </span>
-                        <input type="number" name="harga" value="{{ old('harga', $obat->harga) }}" placeholder="0" min="0" step="1"
-                            class="w-full focus:outline-none
-                                      @error('harga') border-red-500 @enderror" required>
+                    {{-- Harga --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            Harga <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex items-center border-2 rounded-lg px-4 py-2 focus-within:border-primary">
+                            <span class="text-slate-500 text-sm font-semibold mr-2">Rp</span>
+                            <input type="number" name="harga" value="{{ old('harga', $obat->harga) }}" placeholder="0" min="0" step="1"
+                                class="w-full focus:outline-none @error('harga') border-red-500 @enderror" required>
+                        </div>
+                        @error('harga')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
+                    {{-- Stok --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            Stok <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex items-center border-2 rounded-lg px-4 py-2 focus-within:border-primary">
+                            <i class="fas fa-boxes-stacked text-slate-400 mr-2 text-sm"></i>
+                            <input type="number" name="stok" value="{{ old('stok', $obat->stok) }}" placeholder="0" min="0" step="1"
+                                class="w-full focus:outline-none @error('stok') border-red-500 @enderror" required>
+                            <span class="text-slate-400 text-sm ml-2">unit</span>
+                        </div>
+                        @error('stok')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                        <p class="text-xs text-slate-400 mt-1"><i class="fas fa-info-circle"></i> Gunakan tombol +/- Stok di halaman daftar untuk perubahan harian</p>
+                    </div>
 
-                    @error('harga')
-                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
                 </div>
 
 

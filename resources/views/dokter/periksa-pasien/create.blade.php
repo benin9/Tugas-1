@@ -20,18 +20,25 @@
                 @csrf
                 <input type="hidden" name="id_daftar_poli" value="{{ $id }}">
 
+                {{-- Flash Error --}}
+                <x-alert />
+
                 {{-- Pilih Obat --}}
                 <div class="form-control mb-5">
                     <label class="label pb-1">
                         <span class="text-sm font-semibold text-gray-700">Pilih Obat <span class="text-red-500">*</span></span>
+                        <span class="text-xs text-slate-400"><i class="fas fa-circle-info mr-1"></i>Obat yang habis tidak dapat dipilih</span>
                     </label>
                     <select id="select-obat" class="select select-bordered w-full rounded-lg border-2 px-4">
                         <option value="">-- Pilih Obat --</option>
                         @foreach ($obats as $obat)
                             <option value="{{ $obat->id }}"
                                 data-nama="{{ $obat->nama_obat }}"
-                                data-harga="{{ $obat->harga }}">
+                                data-harga="{{ $obat->harga }}"
+                                data-stok="{{ $obat->stok }}"
+                                {{ $obat->stok == 0 ? 'disabled' : '' }}>
                                 {{ $obat->nama_obat }} - Rp{{ number_format($obat->harga) }}
+                                (Stok: {{ $obat->stok }}{{ $obat->stok == 0 ? ' - HABIS' : '' }})
                             </option>
                         @endforeach
                     </select>
@@ -100,10 +107,20 @@
             const id = selectedOption.value;
             const nama = selectedOption.dataset.nama;
             const harga = parseInt(selectedOption.dataset.harga || 0);
+            const stok = parseInt(selectedOption.dataset.stok || 0);
 
-            if (!id || daftarObat.some(o => o.id == id)) return;
+            if (!id) return;
 
-            daftarObat.push({ id, nama, harga });
+            // Hitung berapa kali obat ini sudah dipilih
+            const sudahDipilih = daftarObat.filter(o => o.id == id).length;
+
+            if (sudahDipilih >= stok) {
+                alert(`Stok obat "${nama}" tidak mencukupi. Tersisa: ${stok} unit, sudah dipilih: ${sudahDipilih}.`);
+                selectObat.selectedIndex = 0;
+                return;
+            }
+
+            daftarObat.push({ id, nama, harga, stok });
             renderObat();
             selectObat.selectedIndex = 0;
         });
@@ -118,7 +135,11 @@
                 const item = document.createElement('li');
                 item.className = 'flex items-center justify-between px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700';
                 item.innerHTML = `
-                    <span>${obat.nama} — <span class="font-semibold">Rp ${obat.harga.toLocaleString()}</span></span>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-pills text-indigo-400"></i>
+                        <span>${obat.nama} — <span class="font-semibold">Rp ${obat.harga.toLocaleString()}</span></span>
+                        <span class="text-xs text-slate-400">(Stok: ${obat.stok})</span>
+                    </div>
                     <button type="button"
                         onclick="hapusObat(${index})"
                         class="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none rounded-lg px-3">

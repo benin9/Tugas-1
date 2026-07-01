@@ -77,6 +77,8 @@
                             <tr>
                                 <th class="px-6 py-4">#</th>
                                 <th class="px-6 py-4">Nama Obat</th>
+                                <th class="px-6 py-4">Kemasan</th>
+                                <th class="px-6 py-4 text-center">Stok Sisa</th>
                                 <th class="px-6 py-4">Harga</th>
                             </tr>
                         </thead>
@@ -85,6 +87,14 @@
                             <tr class="hover:bg-slate-50 transition">
                                 <td class="px-6 py-4 text-slate-500">{{ $index + 1 }}</td>
                                 <td class="px-6 py-4 font-semibold text-slate-800">{{ $detail->obat->nama_obat }}</td>
+                                <td class="px-6 py-4 text-slate-500">{{ $detail->obat->kemasan }}</td>
+                                <td class="px-6 py-4 text-center">
+                                    @if($detail->obat->stok == 0)
+                                        <span class="inline-block px-2 py-1 text-xs font-bold rounded bg-red-100 text-red-600">Habis</span>
+                                    @else
+                                        <span class="inline-block px-2 py-1 text-xs font-bold rounded bg-slate-100 text-slate-600">{{ $detail->obat->stok }} unit</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 text-slate-500">Rp {{ number_format($detail->obat->harga, 0, ',',
                                     '.') }}</td>
                             </tr>

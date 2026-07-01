@@ -7,6 +7,9 @@
         </h2>
     </div>
 
+    {{-- Alert Flash Message --}}
+    <x-alert />
+
     {{-- Card --}}
     <div class="card bg-base-100 shadow-md rounded-2 border">
         <div class="card-body p-0">

@@ -8,12 +8,7 @@
     </div>
 
     {{-- Alert Flash Message --}}
-    @if (session('message'))
-    <div class="alert alert-{{ session('type') ?? 'success' }} mb-4 rounded-xl shadow-sm" role="alert">
-        <i class="fas fa-{{ session('type') == 'danger' ? 'circle-xmark' : 'circle-check' }}"></i>
-        <span>{{ session('message') }}</span>
-    </div>
-    @endif
+    <x-alert />
 
     {{-- Card --}}
     <div class="card bg-base-100 shadow-md rounded-2 border">
@@ -87,15 +82,6 @@
         </div>
     </div>
 
-    <script>
-        setTimeout(() => {
-            const alert = document.querySelector('.alert');
-            if (alert) {
-                alert.classList.remove('show');
-                alert.classList.add('fade');
-                setTimeout(() => alert.remove(), 200);
-            }
-        }, 2000);
-    </script>
+
 
 </x-layouts.app>

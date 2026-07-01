@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PasienController;
 use App\Http\Controllers\Dokter\PeriksaPasienController;
 use App\Http\Controllers\Dokter\RiwayatPasienController;
 use App\Http\Controllers\Admin\ObatController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Redirect root ke login
@@ -27,14 +28,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ===================== ADMIN =====================
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('polis', AdminPoliController::class);
     Route::resource('dokter', DokterController::class);
     Route::resource('pasien', PasienController::class);
     Route::resource('obat', ObatController::class);
+    Route::post('obat/{id}/stok', [ObatController::class, 'updateStok'])->name('obat.stok');
 
 });
 
